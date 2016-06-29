@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AT_Utils;
 
-namespace AnisotropicPartResizer
+namespace AT_Utils
 {
 	public abstract class PartUpdaterBase : PartModule
 	{

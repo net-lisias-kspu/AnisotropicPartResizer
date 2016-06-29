@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AT_Utils;
 
-namespace AnisotropicPartResizer
+namespace AT_Utils
 {
 	public class Scale
 	{
@@ -56,6 +56,11 @@ namespace AnisotropicPartResizer
 		public static implicit operator float(Scale s) { return s.absolute; }
 	}
 
+	public static class AnisotropicPartResizerConfig
+	{
+		public static TechFloat MinAspect, MaxAspect;
+		public static TechFloat MinSize, MaxSize;
+	}
 
 	public class AnisotropicResizableBase : PartUpdaterBase, IPartCostModifier
 	{
@@ -141,8 +146,8 @@ namespace AnisotropicPartResizer
 			SaveDefaults();
 			if(HighLogic.LoadedSceneIsEditor) 
 			{
-				init_limit(HangarConfig.Globals.MinAspect, ref minAspect, Mathf.Min(aspect, orig_aspect));
-				init_limit(HangarConfig.Globals.MaxAspect, ref maxAspect, Mathf.Max(aspect, orig_aspect));
+				init_limit(AnisotropicPartResizerConfig.MinAspect, ref minAspect, Mathf.Min(aspect, orig_aspect));
+				init_limit(AnisotropicPartResizerConfig.MaxAspect, ref maxAspect, Mathf.Max(aspect, orig_aspect));
 			}
 			just_loaded = true;
 		}
@@ -216,8 +221,8 @@ namespace AnisotropicPartResizer
 			base.OnStart(state);
 			if(HighLogic.LoadedSceneIsEditor) 
 			{
-				init_limit(HangarConfig.Globals.MinSize, ref minSize, Mathf.Min(size, orig_size));
-				init_limit(HangarConfig.Globals.MaxSize, ref maxSize, Mathf.Max(size, orig_size));
+				init_limit(AnisotropicPartResizerConfig.MinSize, ref minSize, Mathf.Min(size, orig_size));
+				init_limit(AnisotropicPartResizerConfig.MaxSize, ref maxSize, Mathf.Max(size, orig_size));
 				//setup sliders
 				if(sizeOnly && aspectOnly) aspectOnly = false;
 				if(aspectOnly || minSize.Equals(maxSize)) Fields["size"].guiActiveEditor=false;

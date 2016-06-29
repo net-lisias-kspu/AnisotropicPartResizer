@@ -11,7 +11,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-namespace AnisotropicPartResizer
+namespace AT_Utils
 {
 	#region From TweakScale (reworked)
 	public abstract class UpdaterRegistrator : MonoBehaviour

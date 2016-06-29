@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{19ABDD5C-1F12-4D67-B72E-E36071ABFF2C}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>AnisotropicPartResizer</RootNamespace>
+    <RootNamespace>AT_Utils</RootNamespace>
     <AssemblyName>AnisotropicPartScaler</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
   </PropertyGroup>

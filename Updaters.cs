@@ -14,7 +14,7 @@ using System.Linq;
 using UnityEngine;
 using AT_Utils;
 
-namespace AnisotropicPartResizer
+namespace AT_Utils
 {
 	public class NodesUpdater : PartUpdater
 	{
