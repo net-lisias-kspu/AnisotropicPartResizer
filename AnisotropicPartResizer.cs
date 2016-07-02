@@ -56,16 +56,20 @@ namespace AT_Utils
 		public static implicit operator float(Scale s) { return s.absolute; }
 	}
 
-	public static class AnisotropicPartResizerConfig
+	public class ResizerConfig : ConfigNodeObject
 	{
-		public static TechFloat MinAspect, MaxAspect;
-		public static TechFloat MinSize, MaxSize;
+		[Persistent] public TechFloat MinAspect = new TechFloat((a, b) => a < b);
+		[Persistent] public TechFloat MaxAspect = new TechFloat((a, b) => a > b);
+		[Persistent] public TechFloat MinSize   = new TechFloat((a, b) => a < b);
+		[Persistent] public TechFloat MaxSize   = new TechFloat((a, b) => a > b);
 	}
 
 	public class AnisotropicResizableBase : PartUpdaterBase, IPartCostModifier
 	{
+		public static ResizerConfig CFG = new ResizerConfig();
+
 		[KSPField(isPersistant=true, guiActiveEditor=true, guiName="Aspect", guiFormat="S4")]
-		[UI_FloatEdit(scene=UI_Scene.Editor, minValue=0.5f, maxValue=10, incrementLarge=1.0f, incrementSmall=0.1f, incrementSlide=0.001f)]
+		[UI_FloatEdit(scene=UI_Scene.Editor, minValue=0.5f, maxValue=10, incrementLarge=1.0f, incrementSmall=0.1f, incrementSlide=0.001f, sigFigs = 4)]
 		public float aspect = 1.0f;
 
 		[KSPField(isPersistant=false, guiActiveEditor=true, guiName="Mass")] 
@@ -136,7 +140,6 @@ namespace AT_Utils
 				orig_aspect = resizer != null ? resizer.aspect : aspect;
 			}
 			old_aspect = aspect;
-
 		}
 
 		public override void OnStart(StartState state)
@@ -144,10 +147,10 @@ namespace AT_Utils
 			base.OnStart(state);
 			Init(); 
 			SaveDefaults();
-			if(HighLogic.LoadedSceneIsEditor) 
+			if(state == StartState.Editor) 
 			{
-				init_limit(AnisotropicPartResizerConfig.MinAspect, ref minAspect, Mathf.Min(aspect, orig_aspect));
-				init_limit(AnisotropicPartResizerConfig.MaxAspect, ref maxAspect, Mathf.Max(aspect, orig_aspect));
+				init_limit(CFG.MinAspect, ref minAspect, Mathf.Min(aspect, orig_aspect));
+				init_limit(CFG.MaxAspect, ref maxAspect, Mathf.Max(aspect, orig_aspect));
 			}
 			just_loaded = true;
 		}
@@ -160,7 +163,7 @@ namespace AT_Utils
 	{
 		//GUI
 		[KSPField(isPersistant=true, guiActiveEditor=true, guiName="Size", guiFormat="S4")]
-		[UI_FloatEdit(scene=UI_Scene.Editor, minValue=0.5f, maxValue=10, incrementLarge=1.0f, incrementSmall=0.1f, incrementSlide=0.001f)]
+		[UI_FloatEdit(scene=UI_Scene.Editor, minValue=0.5f, maxValue=10, incrementLarge=1.0f, incrementSmall=0.1f, incrementSlide=0.001f, sigFigs = 4)]
 		public float size = 1.0f;
 		
 		//module config
@@ -219,10 +222,10 @@ namespace AT_Utils
 		public override void OnStart(StartState state)
 		{
 			base.OnStart(state);
-			if(HighLogic.LoadedSceneIsEditor) 
+			if(state == StartState.Editor) 
 			{
-				init_limit(AnisotropicPartResizerConfig.MinSize, ref minSize, Mathf.Min(size, orig_size));
-				init_limit(AnisotropicPartResizerConfig.MaxSize, ref maxSize, Mathf.Max(size, orig_size));
+				init_limit(CFG.MinSize, ref minSize, Mathf.Min(size, orig_size));
+				init_limit(CFG.MaxSize, ref maxSize, Mathf.Max(size, orig_size));
 				//setup sliders
 				if(sizeOnly && aspectOnly) aspectOnly = false;
 				if(aspectOnly || minSize.Equals(maxSize)) Fields["size"].guiActiveEditor=false;

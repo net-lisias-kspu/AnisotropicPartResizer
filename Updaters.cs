@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using AT_Utils;
 
 namespace AT_Utils
 {
@@ -31,7 +30,7 @@ namespace AT_Utils
 			{
 				#if DEBUG
 				this.Log("OnRescale: node.id {0}, node.size {1}, node.bForce {2} node.bTorque {3}", 
-					node.id, node.size, node.breakingForce, node.breakingTorque);
+				         node.id, node.size, node.breakingForce, node.breakingTorque);
 				#endif
 				//ModuleGrappleNode adds new AttachNode on dock
 				if(!orig_nodes.ContainsKey(node.id)) continue; 
@@ -82,7 +81,6 @@ namespace AT_Utils
 			part.breakingForce  = Mathf.Max(22f, base_part.breakingForce * scale.absolute.quad);
 			part.breakingTorque = Mathf.Max(22f, base_part.breakingTorque * scale.absolute.quad);
 			//change other properties
-			part.buoyancy = base_part.buoyancy * scale.absolute.cube * scale.absolute.aspect;
 			part.explosionPotential = base_part.explosionPotential * scale.absolute.cube * scale.absolute.aspect;
 		}
 	}

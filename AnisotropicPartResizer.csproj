@@ -6,7 +6,7 @@
     <ProjectGuid>{19ABDD5C-1F12-4D67-B72E-E36071ABFF2C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>AT_Utils</RootNamespace>
-    <AssemblyName>AnisotropicPartScaler</AssemblyName>
+    <AssemblyName>001_AnisotropicPartResizer</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

@@ -8,7 +8,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using AT_Utils;
 
 namespace AT_Utils
 {
@@ -43,7 +42,7 @@ namespace AT_Utils
 		{ 
 			string updater_name = typeof(UpdaterType).FullName;
 			if(UpdatersTypes.ContainsKey(updater_name)) return;
-			Utils.Log("PartUpdater: registering {0}", updater_name);
+			Utils.Log("PartUpdater: registering {}", updater_name);
 			UpdatersTypes[updater_name] = updaterConstructor<UpdaterType>();
 		}
 		#endregion
