@@ -91,6 +91,10 @@ namespace AT_Utils
 			SaveDefaults();
 			if(state == StartState.Editor) 
 			{
+				//init global limits
+				if(minAspect < 0) minAspect = ResizerGlobals.Instance.AbsMinAspect;
+				if(maxAspect < 0) maxAspect = ResizerGlobals.Instance.AbsMaxAspect;
+				//get TechTree limits
 				var limits = ResizerConfig.GetLimits(TechGroupID);
 				if(limits != null)
 				{

@@ -1,4 +1,4 @@
-//   HangarPartResizer.cs
+	//   HangarPartResizer.cs
 //
 //  Author:
 //       Allis Tauri <allista@gmail.com>
@@ -79,18 +79,22 @@ namespace AT_Utils
 			base.OnStart(state);
 			if(state == StartState.Editor) 
 			{
+				//init global limits
+				if(minSize < 0) minSize = ResizerGlobals.Instance.AbsMinSize;
+				if(maxSize < 0) maxSize = ResizerGlobals.Instance.AbsMaxSize;
+				//get TechTree limits
 				var limits = ResizerConfig.GetLimits(TechGroupID);
 				if(limits != null)
 				{
 					init_limit(limits.minSize, ref minSize, Mathf.Min(size, orig_size));
 					init_limit(limits.minSize, ref maxSize, Mathf.Max(size, orig_size));
-					//setup sliders
-					if(sizeOnly && aspectOnly) aspectOnly = false;
-					if(aspectOnly || minSize.Equals(maxSize)) Fields["size"].guiActiveEditor=false;
-					else setup_field(Fields["size"], minSize, maxSize, sizeStepLarge, sizeStepSmall);
-					if(sizeOnly || minAspect.Equals(maxAspect)) Fields["aspect"].guiActiveEditor=false;
-					else setup_field(Fields["aspect"], minAspect, maxAspect, aspectStepLarge, aspectStepSmall);
 				}
+				//setup sliders
+				if(sizeOnly && aspectOnly) aspectOnly = false;
+				if(aspectOnly || minSize.Equals(maxSize)) Fields["size"].guiActiveEditor=false;
+				else setup_field(Fields["size"], minSize, maxSize, sizeStepLarge, sizeStepSmall);
+				if(sizeOnly || minAspect.Equals(maxAspect)) Fields["aspect"].guiActiveEditor=false;
+				else setup_field(Fields["aspect"], minAspect, maxAspect, aspectStepLarge, aspectStepSmall);
 			}
 			Rescale();
 		}

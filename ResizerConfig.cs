@@ -7,11 +7,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 namespace AT_Utils
 {
+	public class ResizerGlobals : PluginGlobals<ResizerGlobals>
+	{
+		[Persistent] public float AbsMinSize = 0.5f;
+		[Persistent] public float AbsMaxSize = 10f;
+		[Persistent] public float AbsMinAspect = 0.5f;
+		[Persistent] public float AbsMaxAspect = 10f;
+	}
+
 	public class TechTreeResizeInfo : PartModule
 	{
 		[KSPField] public string TechGroupID = "";
@@ -36,17 +42,13 @@ namespace AT_Utils
 
 		static void process_part(AvailablePart p)
 		{
-			TechTreeParts.Clear();
-			Utils.Log("Checking '{}'; has {} modules", p.name, p.partPrefab.Modules.Count);//debug
 			foreach(var m in p.partPrefab.Modules)
 			{
-				Utils.Log("Module {}", m.GetType().Name);//debug
 				var tt = m as TechTreeResizeInfo;
 				if(tt != null)
 				{
 					if(!string.IsNullOrEmpty(tt.TechGroupID))
 					{   //using only the first TechTreeInfo
-						Utils.Log("Found valid Info {}", tt.TechGroupID);//debug
 						TechTreeParts.Add(tt.TechGroupID, p);
 						break;
 					}
@@ -55,11 +57,13 @@ namespace AT_Utils
 						          p.name, typeof(TechTreeResizeInfo).Name);
 				}
 			}
-			Utils.Log("====================================================");//debug
 		}
 
 		static void load_parts()
-		{ PartLoader.LoadedPartsList.ForEach(process_part); }
+		{ 
+			TechTreeParts.Clear();
+			PartLoader.LoadedPartsList.ForEach(process_part); 
+		}
 
 		static void update_limits()
 		{
@@ -71,18 +75,13 @@ namespace AT_Utils
 		{
 			base.OnAwake();
 			load_parts();
-			Utils.Log("ResizerConfig.OnAwake: Parts {}, Limits {}", TechTreeParts.Count, Limits.Count);//debug
-		}
-
-		public override void OnLoad(ConfigNode node)
-		{
-			base.OnLoad(node);
 			IsCareer = HighLogic.CurrentGame != null && 
 				HighLogic.CurrentGame.Mode == Game.Modes.CAREER;
+			Utils.Log("ResizerConfig.OnAwake: Career {}, Groups {}", IsCareer, TechTreeParts.Count);//debug
 			Limits.Clear();
 			if(!IsCareer) return;
 			update_limits();
-			Utils.Log("ResizerConfig.OnLoad: Parts {}, Limits {}", TechTreeParts.Count, Limits.Count);//debug
+			Utils.Log("ResizerConfig.OnAwake: Limits {}", Limits.Count);//debug
 		}
 
 		public static ResizerLimits GetLimits(string TechGroupID)
