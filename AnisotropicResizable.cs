@@ -43,8 +43,13 @@ namespace AT_Utils
 		protected void init_limit(ResizerLimits.UpdatableFloat tech_limit, ref float limit, float current_value)
 		{
 			float val = tech_limit.Value;
+//			this.Log("initializeing {}: current_value {}, tech_limit {}, val {}, current is better than val: {}", 
+//			         tech_limit.GetType().Name, current_value, tech_limit.Value, val, tech_limit.Compare(current_value, val));//debug
 			if(tech_limit.Compare(current_value, val)) val = current_value;
+//			this.Log("initializeing: limit {}, val {}, limit is better than val: {}", 
+//			         limit, val, tech_limit.Compare(limit, val));//debug
 			if(limit < 0 || tech_limit.Compare(limit, val)) limit = val;
+//			this.Log("initialized: limit {}", limit);//debug
 		}
 
 		protected static void setup_field(BaseField field, float minval, float maxval, float l_increment, float s_increment)

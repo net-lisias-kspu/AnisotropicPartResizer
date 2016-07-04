@@ -87,7 +87,7 @@ namespace AT_Utils
 				if(limits != null)
 				{
 					init_limit(limits.minSize, ref minSize, Mathf.Min(size, orig_size));
-					init_limit(limits.minSize, ref maxSize, Mathf.Max(size, orig_size));
+					init_limit(limits.maxSize, ref maxSize, Mathf.Max(size, orig_size));
 				}
 				//setup sliders
 				if(sizeOnly && aspectOnly) aspectOnly = false;

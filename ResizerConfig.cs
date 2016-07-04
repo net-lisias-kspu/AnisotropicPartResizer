@@ -77,7 +77,6 @@ namespace AT_Utils
 			load_parts();
 			IsCareer = HighLogic.CurrentGame != null && 
 				HighLogic.CurrentGame.Mode == Game.Modes.CAREER;
-			Utils.Log("ResizerConfig.OnAwake: Career {}, Groups {}", IsCareer, TechTreeParts.Count);//debug
 			Limits.Clear();
 			if(!IsCareer) return;
 			update_limits();
@@ -105,16 +104,16 @@ namespace AT_Utils
 			public void Update(float value)
 			{
 				if(value < 0) return;
-				if(Value < 0 || Compare(Value, value))
+				if(Value < 0 || Compare(value, Value))
 					Value = value;
 			}
 
 			public static implicit operator float(UpdatableFloat f) { return f.Value; }
 		}
 		public class UpdatableMin : UpdatableFloat
-		{ public UpdatableMin() : base((a, b) => a > b) {} }
+		{ public UpdatableMin() : base((new_value, old_value) => new_value < old_value) {} }
 		public class UpdatableMax : UpdatableFloat
-		{ public UpdatableMax() : base((a, b) => a < b) {} }
+		{ public UpdatableMax() : base((new_value, old_value) => new_value > old_value) {} }
 
 		public UpdatableMin minSize   = new UpdatableMin();
 		public UpdatableMax maxSize   = new UpdatableMax();
