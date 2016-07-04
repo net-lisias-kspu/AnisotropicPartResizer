@@ -75,6 +75,9 @@
     <Compile Include="UpdaterRegistrator.cs" />
     <Compile Include="PartUpdaterBase.cs" />
     <Compile Include="Updaters.cs" />
+    <Compile Include="ResizerConfig.cs" />
+    <Compile Include="Scale.cs" />
+    <Compile Include="AnisotropicResizable.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
