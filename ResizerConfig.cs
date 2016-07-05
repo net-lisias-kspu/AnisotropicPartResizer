@@ -80,7 +80,6 @@ namespace AT_Utils
 			Limits.Clear();
 			if(!IsCareer) return;
 			update_limits();
-			Utils.Log("ResizerConfig.OnAwake: Limits {}", Limits.Count);//debug
 		}
 
 		public static ResizerLimits GetLimits(string TechGroupID)
