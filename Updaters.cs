@@ -28,7 +28,7 @@ namespace AT_Utils
 			foreach(AttachNode node in part.attachNodes)
 			{
 				#if DEBUG
-				this.Log("OnRescale: node.id {0}, node.size {1}, node.bForce {2} node.bTorque {3}", 
+				this.Log("OnRescale: node.id {}, node.size {}, node.bForce {} node.bTorque {}", 
 				         node.id, node.size, node.breakingForce, node.breakingTorque);
 				#endif
 				//ModuleGrappleNode adds new AttachNode on dock
