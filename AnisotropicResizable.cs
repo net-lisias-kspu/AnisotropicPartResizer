@@ -10,7 +10,7 @@ using AT_Utils;
 
 namespace AT_Utils
 {
-	public class AnisotropicResizableBase : PartUpdaterBase, IPartCostModifier
+	public abstract class AnisotropicResizableBase : PartUpdaterBase, IPartCostModifier, IPartMassModifier
 	{
 		[KSPField(isPersistant=true, guiActiveEditor=true, guiName="Aspect", guiFormat="S4")]
 		[UI_FloatEdit(scene=UI_Scene.Editor, minValue=0.5f, maxValue=10, incrementLarge=1.0f, incrementSmall=0.1f, incrementSlide=0.001f, sigFigs = 4)]
@@ -35,8 +35,19 @@ namespace AT_Utils
 		protected float old_aspect  = -1;
 		[KSPField(isPersistant=true)] public float orig_aspect = -1;
 
-		protected Transform model { get { return part.transform.GetChild(0); } }
-		public    float delta_cost;
+		Transform _model;
+		protected Transform model 
+		{ 
+			get 
+			{ 
+				if(_model == null)
+					_model = part.transform.Find("model"); 
+				return _model;
+			} 
+		}
+
+		public    float cost;
+		public    float mass;
 		protected bool  just_loaded = true;
 
 		#region TechTree
@@ -110,8 +121,13 @@ namespace AT_Utils
 			just_loaded = true;
 		}
 
-		public float GetModuleCost(float default_cost, ModifierStagingSituation situation) { return delta_cost; }
-		public ModifierChangeWhen GetModuleCostChangeWhen() { return ModifierChangeWhen.CONSTANTLY; }
+		#region IPart*Modifiers
+		public virtual float GetModuleCost(float defaultCost, ModifierStagingSituation sit) { return cost-defaultCost; }
+		public virtual ModifierChangeWhen GetModuleCostChangeWhen() { return ModifierChangeWhen.CONSTANTLY; }
+
+		public virtual float GetModuleMass(float defaultMass, ModifierStagingSituation sit) { return mass-defaultMass; }
+		public virtual ModifierChangeWhen GetModuleMassChangeWhen() { return ModifierChangeWhen.CONSTANTLY; }
+		#endregion
 	}
 }
 

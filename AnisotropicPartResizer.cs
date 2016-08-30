@@ -33,9 +33,8 @@ namespace AT_Utils
 		[KSPField(isPersistant = true)] public Vector3 orig_local_scale;
 		Vector3 old_local_scale;
 		float old_size  = -1;
-		float orig_cost;
 
-		Scale scale { get { return new Scale(size, old_size, orig_size, aspect, old_aspect, just_loaded); } }
+		public Scale scale { get { return new Scale(size, old_size, orig_size, aspect, old_aspect, just_loaded); } }
 		
 		#region PartUpdaters
 		readonly List<PartUpdater> updaters = new List<PartUpdater>();
@@ -68,7 +67,6 @@ namespace AT_Utils
 				orig_size = resizer != null ? resizer.size : size;
 			}
 			old_size  = size;
-			orig_cost = specificCost.x+specificCost.y+specificCost.z; //specificCost.w is eliminated anyway
 			if(orig_local_scale == Vector3.zero || !part.isClone)
 				orig_local_scale = model.localScale;
 			create_updaters();
@@ -112,12 +110,12 @@ namespace AT_Utils
 			if(model == null) return;
 			Scale _scale = scale;
 			//change model scale
-			model.localScale = ScaleVector(orig_local_scale, _scale, _scale.aspect);
+			model.localScale = _scale.ScaleVector(orig_local_scale);
 			model.hasChanged = true;
 			part.transform.hasChanged = true;
 			//recalculate mass and cost
-			part.mass  = ((specificMass.x*_scale + specificMass.y)*_scale + specificMass.z)*_scale * _scale.aspect + specificMass.w;
-			delta_cost = ((specificCost.x*_scale + specificCost.y)*_scale + specificCost.z)*_scale * _scale.aspect - orig_cost; //specificCost.w is eliminated anyway
+			mass = ((specificMass.x*_scale + specificMass.y)*_scale + specificMass.z)*_scale * _scale.aspect + specificMass.w;
+			cost = ((specificCost.x*_scale + specificCost.y)*_scale + specificCost.z)*_scale * _scale.aspect + specificCost.w;
 			//update nodes and modules
 			updaters.ForEach(u => u.OnRescale(_scale));
 			//save size and aspect
