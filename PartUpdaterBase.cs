@@ -15,9 +15,6 @@ namespace AT_Utils
 	{
 		protected Part base_part;
 
-		public static Vector3 ScaleVector(Vector3 v, float s, float l)
-		{ return Vector3.Scale(v, new Vector3(s, s*l, s)); }
-
 		public virtual void Init() 
 		{ base_part = PartLoader.getPartInfoByName(part.partInfo.name).partPrefab; }
 

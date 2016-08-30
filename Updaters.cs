@@ -34,7 +34,7 @@ namespace AT_Utils
 				//ModuleGrappleNode adds new AttachNode on dock
 				if(!orig_nodes.ContainsKey(node.id)) continue; 
 				//update node position
-				node.position = ScaleVector(node.originalPosition, scale, scale.aspect);
+				node.position = scale.ScaleVector(node.originalPosition);
 				part.UpdateAttachedPartPos(node);
 				//update node size
 				int new_size = orig_nodes[node.id].size + Mathf.RoundToInt(scale.size-scale.orig_size);
@@ -48,7 +48,7 @@ namespace AT_Utils
 			if(part.srfAttachNode != null)
 			{
 				Vector3 old_position = part.srfAttachNode.position;
-				part.srfAttachNode.position = ScaleVector(part.srfAttachNode.originalPosition, scale, scale.aspect);
+				part.srfAttachNode.position = scale.ScaleVector(part.srfAttachNode.originalPosition);
 				//don't move the part at start, its position is persistant
 				if(!scale.FirstTime)
 				{
@@ -65,7 +65,7 @@ namespace AT_Utils
 				if(child.srfAttachNode != null && child.srfAttachNode.attachedPart == part)
 				{
 					Vector3 attachedPosition = child.transform.localPosition + child.transform.localRotation * child.srfAttachNode.position;
-					Vector3 targetPosition = ScaleVector(attachedPosition, scale.relative, scale.relative.aspect);
+					Vector3 targetPosition = scale.ScaleVectorRelative(attachedPosition);
 					child.transform.Translate(targetPosition - attachedPosition, part.transform);
 				}
 			}
@@ -275,7 +275,7 @@ namespace AT_Utils
 				object orig_scale;
 				if(!mp.orig_data.TryGetValue("local_scale", out orig_scale) ||
 				   !(orig_scale is Vector3)) return;
-				mp.module.jettisonTransform.localScale = ScaleVector((Vector3)orig_scale, scale, scale.aspect);
+				mp.module.jettisonTransform.localScale = scale.ScaleVector((Vector3)orig_scale);
 			}
 		}
 	}

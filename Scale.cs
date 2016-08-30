@@ -6,6 +6,7 @@
 //  Copyright (c) 2016 Allis Tauri
 
 using System;
+using UnityEngine;
 
 namespace AT_Utils
 {
@@ -47,6 +48,15 @@ namespace AT_Utils
 			relative	   = new SimpleScale(size/old_size, aspect/old_aspect);
 			FirstTime      = first_time;
 		}
+
+		public static Vector3 ScaleVector(Vector3 v, float scale, float aspect)
+		{ return Vector3.Scale(v, new Vector3(scale, scale*aspect, scale)); }
+
+		public Vector3 ScaleVector(Vector3 v)
+		{ return ScaleVector(v, absolute.scale, absolute.aspect); }
+
+		public Vector3 ScaleVectorRelative(Vector3 v)
+		{ return ScaleVector(v, relative.scale, relative.aspect); }
 
 		public static implicit operator float(Scale s) { return s.absolute; }
 	}
