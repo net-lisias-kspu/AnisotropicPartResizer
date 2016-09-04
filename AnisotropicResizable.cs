@@ -94,7 +94,7 @@ namespace AT_Utils
 		{
 			if(orig_aspect < 0 || HighLogic.LoadedSceneIsEditor)
 			{
-				var resizer = base_part.GetModule<AnisotropicResizableBase>();
+				var resizer = base_part.Modules.GetModule<AnisotropicResizableBase>();
 				orig_aspect = resizer != null ? resizer.aspect : aspect;
 			}
 			old_aspect = aspect;

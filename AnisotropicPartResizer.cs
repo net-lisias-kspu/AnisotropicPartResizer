@@ -63,7 +63,7 @@ namespace AT_Utils
 			base.SaveDefaults();
 			if(orig_size < 0 || HighLogic.LoadedSceneIsEditor)
 			{
-				var resizer = base_part.GetModule<AnisotropicPartResizer>();
+				var resizer = base_part.Modules.GetModule<AnisotropicPartResizer>();
 				orig_size = resizer != null ? resizer.size : size;
 			}
 			old_size  = size;

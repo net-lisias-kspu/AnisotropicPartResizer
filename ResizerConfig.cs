@@ -122,7 +122,7 @@ namespace AT_Utils
 		void update_limits(AvailablePart part)
 		{
 			if(!Utils.PartIsPurchased(part.name)) return;
-			var info = part.partPrefab.GetModule<TechTreeResizeInfo>();
+			var info = part.partPrefab.Modules.GetModule<TechTreeResizeInfo>();
 			if(info == null) return;
 			minAspect.Update(info.minAspect);
 			maxAspect.Update(info.maxAspect);

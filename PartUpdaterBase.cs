@@ -32,7 +32,7 @@ namespace AT_Utils
 		public readonly static Dictionary<string, Func<Part, PartUpdater>> UpdatersTypes = new Dictionary<string, Func<Part, PartUpdater>>();
 
 		static Func<Part, PartUpdater> updaterConstructor<UpdaterType>() where UpdaterType : PartUpdater
-		{ return part => part.GetModule<UpdaterType>() ?? part.AddModule(typeof(UpdaterType).Name) as UpdaterType; }
+		{ return part => part.Modules.GetModule<UpdaterType>() ?? part.AddModule(typeof(UpdaterType).Name) as UpdaterType; }
 
 		public static void RegisterUpdater<UpdaterType>() 
 			where UpdaterType : PartUpdater
