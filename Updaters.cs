@@ -84,6 +84,14 @@ namespace AT_Utils
 		}
 	}
 
+	public class DragCubeUpdater : PartUpdater
+	{
+		public override void OnRescale(Scale scale)
+		{
+			part.DragCubes.ForceUpdate(true, true, true);
+		}
+	}
+
 	/// <summary>
 	/// Emitter updater. Adapted from TweakScale.
 	/// </summary>
