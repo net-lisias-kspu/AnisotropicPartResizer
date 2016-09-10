@@ -76,19 +76,16 @@ namespace AT_Utils
 	{
 		public override void OnRescale(Scale scale)
 		{
+			//update CoM offset
+			part.CoMOffset = scale.ScaleVector(base_part.CoMOffset);
+			//update drag cubes
+			part.DragCubes.ForceUpdate(true, true, true);
 			//change breaking forces (if not defined in the config, set to a reasonable default)
 			part.breakingForce  = Mathf.Max(22f, base_part.breakingForce * scale.absolute.quad);
 			part.breakingTorque = Mathf.Max(22f, base_part.breakingTorque * scale.absolute.quad);
 			//change other properties
 			part.explosionPotential = base_part.explosionPotential * scale.absolute.cube * scale.absolute.aspect;
-		}
-	}
 
-	public class DragCubeUpdater : PartUpdater
-	{
-		public override void OnRescale(Scale scale)
-		{
-			part.DragCubes.ForceUpdate(true, true, true);
 		}
 	}
 
@@ -159,7 +156,9 @@ namespace AT_Utils
 			if(scale.FirstTime) return;
 			foreach(PartResource r in part.Resources)
 			{
-				var s = r.resourceName == "AblativeShielding"? 
+				var surface = r.resourceName == "AblativeShielding" ||
+					r.resourceName == "Ablator";
+				var s = surface? 
 					scale.relative.quad : scale.relative.cube * scale.relative.aspect;
 				r.amount *= s; r.maxAmount *= s;
 			}
