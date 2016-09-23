@@ -218,6 +218,12 @@ namespace AT_Utils
 		}
 	}
 
+	public class ResourceConverterUpdater : ModuleUpdater<BaseConverter>
+	{
+		protected override void on_rescale(ModulePair<BaseConverter> mp, Scale scale)
+		{ mp.module.Efficiency = mp.base_module.Efficiency * scale; }
+	}
+
 	public class SolarPanelUpdater : ModuleUpdater<ModuleDeployableSolarPanel>
 	{
 		protected override void on_rescale(ModulePair<ModuleDeployableSolarPanel> mp, Scale scale)
