@@ -90,7 +90,7 @@ namespace AT_Utils
 		}
 		void OnDestroy() { GameEvents.onEditorShipModified.Remove(UpdateGUI); }
 
-		protected override void SaveDefaults()
+		public override void SaveDefaults()
 		{
 			if(orig_aspect < 0 || HighLogic.LoadedSceneIsEditor)
 			{
@@ -103,8 +103,6 @@ namespace AT_Utils
 		public override void OnStart(StartState state)
 		{
 			base.OnStart(state);
-			Init(); 
-			SaveDefaults();
 			if(state == StartState.Editor) 
 			{
 				//init global limits

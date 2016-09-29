@@ -7,7 +7,7 @@
 
 // This code is based on Procedural Fairings plug-in by Alexey Volynskov, KzPartResizer class
 // And on ideas drawn from the TweakScale plugin
-using System;
+
 using System.Collections.Generic;
 using UnityEngine;
 using AT_Utils;
@@ -41,24 +41,23 @@ namespace AT_Utils
 		
 		void create_updaters()
 		{
-			foreach(var updater_type in PartUpdater.UpdatersTypes.Values) 
+			foreach(var updater_type in PartUpdater.UpdatersTypes) 
 			{
-				PartUpdater updater = updater_type(part);
+				PartUpdater updater = updater_type.Value(part);
 				if(updater == null) continue;
-				try { updater.Init(); }
-				catch 
-				{ 
-					part.RemoveModule(updater); 
-					continue; 
+				if(updater.Init())
+				{
+					updater.SaveDefaults();
+					updaters.Add(updater);
 				}
-				updaters.Add(updater);
+				else part.RemoveModule(updater); 
 			}
 			updaters.Sort((a, b) => a.priority.CompareTo(b.priority));
 		}
 		#endregion
 		
 		//methods
-		protected override void SaveDefaults()
+		public override void SaveDefaults()
 		{
 			base.SaveDefaults();
 			if(orig_size < 0 || HighLogic.LoadedSceneIsEditor)
@@ -69,12 +68,12 @@ namespace AT_Utils
 			old_size  = size;
 			if(orig_local_scale == Vector3.zero || !part.isClone)
 				orig_local_scale = model.localScale;
-			create_updaters();
 		}
 
 		public override void OnStart(StartState state)
 		{
 			base.OnStart(state);
+			create_updaters();
 			if(state == StartState.Editor) 
 			{
 				//init global limits

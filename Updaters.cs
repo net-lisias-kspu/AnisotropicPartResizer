@@ -7,6 +7,7 @@
 
 // This code is based on Procedural Fairings plug-in by Alexey Volynskov, KzPartResizer class
 // And on ideas drawn from the TweakScale plugin
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,7 @@ namespace AT_Utils
 	{
 		readonly Dictionary<string, AttachNode> orig_nodes = new Dictionary<string, AttachNode>();
 
-		public override void Init() { base.Init(); SaveDefaults(); }
-		protected override void SaveDefaults()
+		public override void SaveDefaults()
 		{ base_part.attachNodes.ForEach(n => orig_nodes[n.id] = n); }
 
 		public override void OnRescale(Scale scale)
@@ -27,10 +27,6 @@ namespace AT_Utils
 			//update attach nodes and their parts
 			foreach(AttachNode node in part.attachNodes)
 			{
-				#if DEBUG
-				this.Log("OnRescale: node.id {}, node.size {}, node.bForce {} node.bTorque {}", 
-				         node.id, node.size, node.breakingForce, node.breakingTorque);
-				#endif
 				//ModuleGrappleNode adds new AttachNode on dock
 				if(!orig_nodes.ContainsKey(node.id)) continue; 
 				//update node position
@@ -270,7 +266,7 @@ namespace AT_Utils
 
 	public class JettisonUpdater : ModuleUpdater<ModuleJettison>
 	{
-		protected override void SaveDefaults()
+		public override void SaveDefaults()
 		{
 			base.SaveDefaults();
 			foreach(var mp in modules)
