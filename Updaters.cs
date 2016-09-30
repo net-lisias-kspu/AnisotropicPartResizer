@@ -80,7 +80,7 @@ namespace AT_Utils
 			part.breakingForce  = Mathf.Max(22f, base_part.breakingForce * scale.absolute.quad);
 			part.breakingTorque = Mathf.Max(22f, base_part.breakingTorque * scale.absolute.quad);
 			//change other properties
-			part.explosionPotential = base_part.explosionPotential * scale.absolute.cube * scale.absolute.aspect;
+			part.explosionPotential = base_part.explosionPotential * scale.absolute.volume;
 
 		}
 	}
@@ -155,7 +155,7 @@ namespace AT_Utils
 				var surface = r.resourceName == "AblativeShielding" ||
 					r.resourceName == "Ablator";
 				var s = surface? 
-					scale.relative.quad : scale.relative.cube * scale.relative.aspect;
+					scale.relative.quad : scale.relative.volume;
 				r.amount *= s; r.maxAmount *= s;
 			}
 		}
@@ -209,8 +209,8 @@ namespace AT_Utils
 		{
 			var input_resources  = mp.base_module.inputList.ToDictionary(r => r.name);
 			var output_resources = mp.base_module.outputList.ToDictionary(r => r.name);
-			mp.module.inputList.ForEach(r =>  r.rate = input_resources[r.name].rate  * scale.absolute.cube * scale.absolute.aspect);
-			mp.module.outputList.ForEach(r => r.rate = output_resources[r.name].rate * scale.absolute.cube * scale.absolute.aspect);
+			mp.module.inputList.ForEach(r =>  r.rate = input_resources[r.name].rate  * scale.absolute.volume);
+			mp.module.outputList.ForEach(r => r.rate = output_resources[r.name].rate * scale.absolute.volume);
 		}
 	}
 
@@ -275,8 +275,8 @@ namespace AT_Utils
 
 		protected override void on_rescale(ModulePair<ModuleJettison> mp, Scale scale)
 		{
-			mp.module.jettisonedObjectMass = mp.base_module.jettisonedObjectMass * scale.absolute.cube * scale.absolute.aspect;
-			mp.module.jettisonForce = mp.base_module.jettisonForce * scale.absolute.cube * scale.absolute.aspect;
+			mp.module.jettisonedObjectMass = mp.base_module.jettisonedObjectMass * scale.absolute.volume;
+			mp.module.jettisonForce = mp.base_module.jettisonForce * scale.absolute.volume;
 			if(mp.module.jettisonTransform != null)
 			{
 				var p = mp.module.jettisonTransform.parent.gameObject.GetComponent<Part>();

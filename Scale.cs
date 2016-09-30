@@ -19,6 +19,7 @@ namespace AT_Utils
 			public float sqrt { get; private set; }
 			public float quad { get; private set; }
 			public float cube { get; private set; }
+			public float volume { get; private set; }
 
 			public SimpleScale(float scale, float aspect)
 			{ 
@@ -27,6 +28,7 @@ namespace AT_Utils
 				sqrt = (float)Math.Sqrt(scale);
 				quad = scale*scale;
 				cube = quad*scale;
+				volume = cube*aspect;
 			}
 
 			public static implicit operator float(SimpleScale s) { return s.scale; }
