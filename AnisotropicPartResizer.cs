@@ -101,7 +101,7 @@ namespace AT_Utils
 			if(!HighLogic.LoadedSceneIsEditor) return;
 			if(old_local_scale != model.localScale) Rescale();
 			else if(unequal(old_size, size) || unequal(old_aspect, aspect))
-			{ Rescale(); part.BreakConnectedStruts(); }
+			{ Rescale(); part.BreakConnectedCompoundParts(); }
 		}
 
 		void Rescale()

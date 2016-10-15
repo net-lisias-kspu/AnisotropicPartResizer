@@ -184,7 +184,7 @@ namespace AT_Utils
 	{
 		protected override void on_rescale(ModulePair<ModuleDockingNode> mp, Scale scale)
 		{
-			AttachNode node = part.findAttachNode(mp.module.referenceAttachNode);
+			AttachNode node = part.FindAttachNode(mp.module.referenceAttachNode);
 			if(node == null) return;
 			if(mp.module.nodeType.StartsWith("size"))
 				mp.module.nodeType = string.Format("size{0}", node.size);
@@ -198,8 +198,8 @@ namespace AT_Utils
 			mp.module.PitchTorque  = mp.base_module.PitchTorque * scale.absolute.quad * scale.absolute.aspect;
 			mp.module.YawTorque    = mp.base_module.YawTorque   * scale.absolute.quad * scale.absolute.aspect;
 			mp.module.RollTorque   = mp.base_module.RollTorque  * scale.absolute.quad * scale.absolute.aspect;
-			var input_resources = mp.base_module.inputResources.ToDictionary(r => r.name);
-			mp.module.inputResources.ForEach(r => r.rate = input_resources[r.name].rate * scale.absolute.quad * scale.absolute.aspect);
+			var input_resources = mp.base_module.resHandler.inputResources.ToDictionary(r => r.name);
+			mp.module.resHandler.inputResources.ForEach(r => r.rate = input_resources[r.name].rate * scale.absolute.quad * scale.absolute.aspect);
 		}
 	}
 
@@ -207,10 +207,10 @@ namespace AT_Utils
 	{
 		protected override void on_rescale(ModulePair<ModuleGenerator> mp, Scale scale)
 		{
-			var input_resources  = mp.base_module.inputList.ToDictionary(r => r.name);
-			var output_resources = mp.base_module.outputList.ToDictionary(r => r.name);
-			mp.module.inputList.ForEach(r =>  r.rate = input_resources[r.name].rate  * scale.absolute.volume);
-			mp.module.outputList.ForEach(r => r.rate = output_resources[r.name].rate * scale.absolute.volume);
+			var input_resources  = mp.base_module.resHandler.inputResources.ToDictionary(r => r.name);
+			var output_resources = mp.base_module.resHandler.inputResources.ToDictionary(r => r.name);
+			mp.module.resHandler.inputResources.ForEach(r =>  r.rate = input_resources[r.name].rate  * scale.absolute.volume);
+			mp.module.resHandler.inputResources.ForEach(r => r.rate = output_resources[r.name].rate * scale.absolute.volume);
 		}
 	}
 
