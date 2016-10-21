@@ -14,8 +14,6 @@ namespace AT_Utils
 {
 	#region From TweakScale (reworked)
 	public abstract class UpdaterRegistrator : MonoBehaviour
-	//Can't understand what it is needed for =^_^=
-	//Probably a workaround of some sort.
 	{
 		static bool loadedInScene = false;
 
