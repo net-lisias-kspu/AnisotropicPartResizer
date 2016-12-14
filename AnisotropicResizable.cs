@@ -50,6 +50,8 @@ namespace AT_Utils
 		public    float mass;
 		protected bool  just_loaded = true;
 
+		protected abstract void prepare_model();
+
 		#region TechTree
 		protected void init_limit(ResizerLimits.UpdatableFloat tech_limit, ref float limit, float current_value)
 		{
@@ -92,6 +94,7 @@ namespace AT_Utils
 
 		public override void SaveDefaults()
 		{
+			prepare_model();
 			if(orig_aspect < 0 || HighLogic.LoadedSceneIsEditor)
 			{
 				var resizer = base_part.Modules.GetModule<AnisotropicResizableBase>();
@@ -117,6 +120,12 @@ namespace AT_Utils
 				}
 			}
 			just_loaded = true;
+		}
+
+		public override void OnLoad(ConfigNode node)
+		{
+			base.OnLoad(node);
+			prepare_model();
 		}
 
 		#region IPart*Modifiers

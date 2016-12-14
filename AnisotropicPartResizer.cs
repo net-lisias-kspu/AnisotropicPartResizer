@@ -30,7 +30,7 @@ namespace AT_Utils
 
 		//state
 		[KSPField(isPersistant=true)] public float orig_size = -1;
-		[KSPField(isPersistant = true)] public Vector3 orig_local_scale;
+		[KSPField(isPersistant=true)] public Vector3 orig_local_scale;
 		Vector3 old_local_scale;
 		float old_size  = -1;
 
@@ -55,8 +55,19 @@ namespace AT_Utils
 			updaters.Sort((a, b) => a.priority.CompareTo(b.priority));
 		}
 		#endregion
-		
-		//methods
+
+		protected override void prepare_model()
+		{
+			if(orig_local_scale == Vector3.zero || !part.isClone)
+				orig_local_scale = model.localScale;
+			if(orig_size > 0)
+			{
+				model.localScale = Scale.ScaleVector(orig_local_scale, size/orig_size, aspect);
+				model.hasChanged = true;
+				part.transform.hasChanged = true;
+			}
+		}
+
 		public override void SaveDefaults()
 		{
 			base.SaveDefaults();
@@ -66,8 +77,6 @@ namespace AT_Utils
 				orig_size = resizer != null ? resizer.size : size;
 			}
 			old_size  = size;
-			if(orig_local_scale == Vector3.zero || !part.isClone)
-				orig_local_scale = model.localScale;
 		}
 
 		public override void OnStart(StartState state)
