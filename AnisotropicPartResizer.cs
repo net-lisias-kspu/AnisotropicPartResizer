@@ -58,11 +58,12 @@ namespace AT_Utils
 
 		protected override void prepare_model()
 		{
-			if(orig_local_scale == Vector3.zero || !part.isClone)
-				orig_local_scale = model.localScale;
+			if(prefab_model == null) return;
+			orig_local_scale = prefab_model.localScale;
 			if(orig_size > 0)
 			{
 				model.localScale = Scale.ScaleVector(orig_local_scale, size/orig_size, aspect);
+//				this.Log("size {}/{}, orig scale: {}, local scale: {}", size, orig_size, orig_local_scale, model.localScale);//debug
 				model.hasChanged = true;
 				part.transform.hasChanged = true;
 			}
@@ -119,6 +120,7 @@ namespace AT_Utils
 			Scale _scale = scale;
 			//change model scale
 			model.localScale = _scale.ScaleVector(orig_local_scale);
+//			this.Log("size {}/{}, orig scale: {}, local scale: {}", size, orig_size, orig_local_scale, model.localScale);//debug
 			model.hasChanged = true;
 			part.transform.hasChanged = true;
 			//recalculate mass and cost
