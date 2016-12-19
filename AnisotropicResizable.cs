@@ -46,6 +46,19 @@ namespace AT_Utils
 			} 
 		}
 
+		Transform _prefab_model;
+		protected Transform prefab_model 
+		{ 
+			get 
+			{ 
+				if(_prefab_model == null && 
+				   part.partInfo != null && 
+				   part.partInfo.partPrefab != null)
+					_prefab_model = part.partInfo.partPrefab.transform.Find("model"); 
+				return _prefab_model;
+			} 
+		}
+
 		public    float cost;
 		public    float mass;
 		protected bool  just_loaded = true;
