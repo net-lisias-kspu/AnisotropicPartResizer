@@ -214,10 +214,39 @@ namespace AT_Utils
 		}
 	}
 
-	public class ResourceConverterUpdater : ModuleUpdater<BaseConverter>
+	public class AsteroidDrillUpdater : ModuleUpdater<ModuleAsteroidDrill>
 	{
-		protected override void on_rescale(ModulePair<BaseConverter> mp, Scale scale)
-		{ mp.module.Efficiency = mp.base_module.Efficiency * scale; }
+		protected override void on_rescale(ModulePair<ModuleAsteroidDrill> mp, Scale scale)
+		{ 
+			mp.module.PowerConsumption = mp.base_module.PowerConsumption * scale;
+			mp.module.Efficiency = mp.base_module.Efficiency * scale;
+		}
+	}
+
+	public class ResourceHarvesterUpdater : ModuleUpdater<ModuleResourceHarvester>
+	{
+		protected override void on_rescale(ModulePair<ModuleResourceHarvester> mp, Scale scale)
+		{ 
+			mp.module.Efficiency = mp.base_module.Efficiency * scale;
+			var def_ratios = mp.base_module.inputList.ToDictionary(r => r.ResourceName);
+			mp.module.inputList.ForEach(r => r.Ratio = def_ratios[r.ResourceName].Ratio*scale);
+		}
+	}
+
+	public class ResourceConverterUpdater : ModuleUpdater<ModuleResourceConverter>
+	{
+		static void scale_res_list(List<ResourceRatio> cur, List<ResourceRatio> def, float scale)
+		{
+			var def_ratios = def.ToDictionary(r => r.ResourceName);
+			cur.ForEach(r => r.Ratio = def_ratios[r.ResourceName].Ratio*scale);
+		}
+
+		protected override void on_rescale(ModulePair<ModuleResourceConverter> mp, Scale scale)
+		{ 
+			scale_res_list(mp.module.Recipe.Inputs, mp.base_module.Recipe.Inputs, scale);
+			scale_res_list(mp.module.Recipe.Outputs, mp.base_module.Recipe.Outputs, scale);
+			scale_res_list(mp.module.Recipe.Requirements, mp.base_module.Recipe.Requirements, scale);
+		}
 	}
 
 	public class SolarPanelUpdater : ModuleUpdater<ModuleDeployableSolarPanel>
