@@ -76,7 +76,7 @@ namespace AT_Utils
 			base.OnAwake();
 			load_parts();
 			IsCareer = HighLogic.CurrentGame != null && 
-				HighLogic.CurrentGame.Mode == Game.Modes.CAREER;
+				HighLogic.CurrentGame.Mode != Game.Modes.SANDBOX;
 			Limits.Clear();
 			if(!IsCareer) return;
 			update_limits();
