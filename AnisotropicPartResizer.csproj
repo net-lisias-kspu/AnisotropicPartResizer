@@ -20,12 +20,17 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\GameData\000_AT_Utils\Plugins</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Nightbuild|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>..\GameData\000_AT_Utils\Plugins</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>NIGHTBUILD</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System">
