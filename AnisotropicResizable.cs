@@ -96,7 +96,10 @@ namespace AT_Utils
 		{ return Mathf.Abs(f1-f2) > eps; }
 
 		public void UpdateGUI(ShipConstruct ship)
-		{ StartCoroutine(CallbackUtil.DelayedCallback(1, () => MassDisplay = Utils.formatMass(part.TotalMass()))); }
+		{ 
+            if(isActiveAndEnabled)
+                StartCoroutine(CallbackUtil.DelayedCallback(1, () => MassDisplay = Utils.formatMass(part.TotalMass())));
+        }
 
 		public override void OnAwake()
 		{
