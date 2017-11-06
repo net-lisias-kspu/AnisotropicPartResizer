@@ -65,6 +65,13 @@ namespace AT_Utils
 
 		protected abstract void prepare_model();
 
+        public void UpdateDragCube()
+        {
+            part.DragCubes.Procedural = true;
+            part.DragCubes.ForceUpdate(true, true, true);
+            part.DragCubes.SetDragWeights();
+        }
+
 		#region TechTree
 		protected void init_limit(ResizerLimits.UpdatableFloat tech_limit, ref float limit, float current_value)
 		{
@@ -135,6 +142,7 @@ namespace AT_Utils
 					init_limit(limits.maxAspect, ref maxAspect, Mathf.Max(aspect, orig_aspect));
 				}
 			}
+            UpdateDragCube();
 			just_loaded = true;
 		}
 
