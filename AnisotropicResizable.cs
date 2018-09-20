@@ -142,7 +142,8 @@ namespace AT_Utils
                     init_limit(limits.maxAspect, ref maxAspect, Mathf.Max(aspect, orig_aspect));
                 }
             }
-            UpdateDragCube();
+            else 
+                UpdateDragCube();
             just_loaded = true;
         }
 
