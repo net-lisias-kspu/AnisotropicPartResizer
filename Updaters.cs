@@ -317,4 +317,12 @@ namespace AT_Utils
             }
         }
     }
+
+    public class ControlSurfaceUpdater : ModuleUpdater<ModuleControlSurface>
+    {
+        protected override void on_rescale(ModulePair<ModuleControlSurface> mp, Scale scale)
+        {
+            mp.module.ctrlSurfaceArea = mp.base_module.ctrlSurfaceArea * scale.absolute.quad;
+        }
+    }
 }
