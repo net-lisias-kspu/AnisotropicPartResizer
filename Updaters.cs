@@ -28,17 +28,19 @@ namespace AT_Utils
             foreach(AttachNode node in part.attachNodes)
             {
                 //ModuleGrappleNode adds new AttachNode on dock
-                if(!orig_nodes.ContainsKey(node.id)) continue; 
+                if(!orig_nodes.ContainsKey(node.id)) continue;
                 //update node position
                 node.position = scale.ScaleVector(node.originalPosition);
-                part.UpdateAttachedPartPos(node);
                 //update node size
-                int new_size = orig_nodes[node.id].size + Mathf.RoundToInt(scale.size-scale.orig_size);
+                int new_size = orig_nodes[node.id].size + Mathf.RoundToInt(scale.size - scale.orig_size);
                 if(new_size < 0) new_size = 0;
                 node.size = new_size;
                 //update node breaking forces
-                node.breakingForce  = orig_nodes[node.id].breakingForce  * scale.absolute.quad;
+                node.breakingForce = orig_nodes[node.id].breakingForce * scale.absolute.quad;
                 node.breakingTorque = orig_nodes[node.id].breakingTorque * scale.absolute.quad;
+                //move the part
+                if(!scale.FirstTime)
+                    part.UpdateAttachedPartPos(node);
             }
             //update this surface attach node
             if(part.srfAttachNode != null)
@@ -77,7 +79,7 @@ namespace AT_Utils
             //update drag cubes
             part.DragCubes.ForceUpdate(true, true, true);
             //change breaking forces (if not defined in the config, set to a reasonable default)
-            part.breakingForce  = Mathf.Max(22f, base_part.breakingForce * scale.absolute.quad);
+            part.breakingForce = Mathf.Max(22f, base_part.breakingForce * scale.absolute.quad);
             part.breakingTorque = Mathf.Max(22f, base_part.breakingTorque * scale.absolute.quad);
             //change other properties
             part.explosionPotential = base_part.explosionPotential * scale.absolute.volume;
@@ -102,7 +104,7 @@ namespace AT_Utils
                 Shape1D = pe.shape1D;
                 Shape2D = pe.shape2D;
                 Shape3D = pe.shape3D;
-                Force   = pe.force;
+                Force = pe.force;
                 LocalVelocity = pe.localVelocity;
             }
         }
@@ -121,7 +123,7 @@ namespace AT_Utils
             pe.shape1D = ed.Shape1D * scale;
             pe.shape2D = ed.Shape2D * scale;
             pe.shape3D = ed.Shape3D * scale;
-            pe.force   = ed.Force   * scale;
+            pe.force = ed.Force * scale;
             pe.localVelocity = ed.LocalVelocity * scale;
         }
 
@@ -154,7 +156,7 @@ namespace AT_Utils
             {
                 var surface = r.resourceName == "AblativeShielding" ||
                     r.resourceName == "Ablator";
-                var s = surface? 
+                var s = surface ?
                     scale.relative.quad : scale.relative.volume;
                 r.amount *= s; r.maxAmount *= s;
             }
@@ -163,21 +165,21 @@ namespace AT_Utils
 
     public class RCS_Updater : ModuleUpdater<ModuleRCS>
     {
-        [KSPField(isPersistant=false, guiActiveEditor=true, guiActive=true, guiName="Thrust")]
+        [KSPField(isPersistant = false, guiActiveEditor = true, guiActive = true, guiName = "Thrust")]
         public string thrustDisplay;
 
-        string all_thrusts() 
-        { 
+        string all_thrusts()
+        {
             return modules
-                .Aggregate("", (s, mp) => s+mp.module.thrusterPower + ", ")
-                .Trim(", ".ToCharArray()); 
+                .Aggregate("", (s, mp) => s + mp.module.thrusterPower + ", ")
+                .Trim(", ".ToCharArray());
         }
 
         public override void OnStart(StartState state) { base.OnStart(state); thrustDisplay = all_thrusts(); }
-        public override void OnRescale(Scale scale)    { base.OnRescale(scale); thrustDisplay = all_thrusts(); }
+        public override void OnRescale(Scale scale) { base.OnRescale(scale); thrustDisplay = all_thrusts(); }
 
         protected override void on_rescale(ModulePair<ModuleRCS> mp, Scale scale)
-        { mp.module.thrusterPower = mp.base_module.thrusterPower*scale.absolute.quad; }
+        { mp.module.thrusterPower = mp.base_module.thrusterPower * scale.absolute.quad; }
     }
 
     public class DockingNodeUpdater : ModuleUpdater<ModuleDockingNode>
@@ -195,9 +197,9 @@ namespace AT_Utils
     {
         protected override void on_rescale(ModulePair<ModuleReactionWheel> mp, Scale scale)
         {
-            mp.module.PitchTorque  = mp.base_module.PitchTorque * scale.absolute.quad * scale.absolute.aspect;
-            mp.module.YawTorque    = mp.base_module.YawTorque   * scale.absolute.quad * scale.absolute.aspect;
-            mp.module.RollTorque   = mp.base_module.RollTorque  * scale.absolute.quad * scale.absolute.aspect;
+            mp.module.PitchTorque = mp.base_module.PitchTorque * scale.absolute.quad * scale.absolute.aspect;
+            mp.module.YawTorque = mp.base_module.YawTorque * scale.absolute.quad * scale.absolute.aspect;
+            mp.module.RollTorque = mp.base_module.RollTorque * scale.absolute.quad * scale.absolute.aspect;
             var input_resources = mp.base_module.resHandler.inputResources.ToDictionary(r => r.name);
             mp.module.resHandler.inputResources.ForEach(r => r.rate = input_resources[r.name].rate * scale.absolute.quad * scale.absolute.aspect);
         }
@@ -207,9 +209,9 @@ namespace AT_Utils
     {
         protected override void on_rescale(ModulePair<ModuleGenerator> mp, Scale scale)
         {
-            var input_resources  = mp.base_module.resHandler.inputResources.ToDictionary(r => r.name);
+            var input_resources = mp.base_module.resHandler.inputResources.ToDictionary(r => r.name);
             var output_resources = mp.base_module.resHandler.inputResources.ToDictionary(r => r.name);
-            mp.module.resHandler.inputResources.ForEach(r =>  r.rate = input_resources[r.name].rate  * scale.absolute.volume);
+            mp.module.resHandler.inputResources.ForEach(r => r.rate = input_resources[r.name].rate * scale.absolute.volume);
             mp.module.resHandler.inputResources.ForEach(r => r.rate = output_resources[r.name].rate * scale.absolute.volume);
         }
     }
@@ -217,7 +219,7 @@ namespace AT_Utils
     public class AsteroidDrillUpdater : ModuleUpdater<ModuleAsteroidDrill>
     {
         protected override void on_rescale(ModulePair<ModuleAsteroidDrill> mp, Scale scale)
-        { 
+        {
             mp.module.PowerConsumption = mp.base_module.PowerConsumption * scale;
             mp.module.Efficiency = mp.base_module.Efficiency * scale;
         }
@@ -226,10 +228,10 @@ namespace AT_Utils
     public class ResourceHarvesterUpdater : ModuleUpdater<ModuleResourceHarvester>
     {
         protected override void on_rescale(ModulePair<ModuleResourceHarvester> mp, Scale scale)
-        { 
+        {
             mp.module.Efficiency = mp.base_module.Efficiency * scale;
             var def_ratios = mp.base_module.inputList.ToDictionary(r => r.ResourceName);
-            mp.module.inputList.ForEach(r => r.Ratio = def_ratios[r.ResourceName].Ratio*scale);
+            mp.module.inputList.ForEach(r => r.Ratio = def_ratios[r.ResourceName].Ratio * scale);
         }
     }
 
@@ -238,11 +240,11 @@ namespace AT_Utils
         static void scale_res_list(List<ResourceRatio> cur, List<ResourceRatio> def, float scale)
         {
             var def_ratios = def.ToDictionary(r => r.ResourceName);
-            cur.ForEach(r => r.Ratio = def_ratios[r.ResourceName].Ratio*scale);
+            cur.ForEach(r => r.Ratio = def_ratios[r.ResourceName].Ratio * scale);
         }
 
         protected override void on_rescale(ModulePair<ModuleResourceConverter> mp, Scale scale)
-        { 
+        {
             scale_res_list(mp.module.Recipe.Inputs, mp.base_module.Recipe.Inputs, scale);
             scale_res_list(mp.module.Recipe.Outputs, mp.base_module.Recipe.Outputs, scale);
             scale_res_list(mp.module.Recipe.Requirements, mp.base_module.Recipe.Requirements, scale);
@@ -253,8 +255,8 @@ namespace AT_Utils
     {
         protected override void on_rescale(ModulePair<ModuleDeployableSolarPanel> mp, Scale scale)
         {
-            mp.module.chargeRate = mp.base_module.chargeRate * scale.absolute.quad * scale.absolute.aspect; 
-            mp.module.flowRate   = mp.base_module.flowRate   * scale.absolute.quad * scale.absolute.aspect; 
+            mp.module.chargeRate = mp.base_module.chargeRate * scale.absolute.quad * scale.absolute.aspect;
+            mp.module.flowRate = mp.base_module.flowRate * scale.absolute.quad * scale.absolute.aspect;
         }
     }
 
@@ -266,24 +268,24 @@ namespace AT_Utils
 
     public class EngineUpdater : ModuleUpdater<ModuleEngines>
     {
-        [KSPField(isPersistant=false, guiActiveEditor=true, guiActive=false, guiName="Max. Thrust")]
+        [KSPField(isPersistant = false, guiActiveEditor = true, guiActive = false, guiName = "Max. Thrust")]
         public string thrustDisplay;
 
-        string all_thrusts() 
-        { 
+        string all_thrusts()
+        {
             return modules
-                .Aggregate("", (s, mp) => s+mp.module.maxThrust + ", ")
-                .Trim(", ".ToCharArray()); 
+                .Aggregate("", (s, mp) => s + mp.module.maxThrust + ", ")
+                .Trim(", ".ToCharArray());
         }
 
         public override void OnStart(StartState state) { base.OnStart(state); thrustDisplay = all_thrusts(); }
-        public override void OnRescale(Scale scale)    { base.OnRescale(scale); thrustDisplay = all_thrusts(); }
+        public override void OnRescale(Scale scale) { base.OnRescale(scale); thrustDisplay = all_thrusts(); }
 
         protected override void on_rescale(ModulePair<ModuleEngines> mp, Scale scale)
         {
             mp.module.minThrust = mp.base_module.minThrust * scale.absolute.quad;
             mp.module.maxThrust = mp.base_module.maxThrust * scale.absolute.quad;
-//            mp.module.heatProduction = mp.base_module.heatProduction * scale.absolute;
+            //            mp.module.heatProduction = mp.base_module.heatProduction * scale.absolute;
         }
     }
 
