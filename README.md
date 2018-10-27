@@ -2,3 +2,5 @@
 ### It is a part of the [AT_Utils](https://github.com/allista/AT_Utils) framework.
 
 Unlike the TweakScale that just changes part size, APR is also capable of changing their aspect (length to width ratio). Otherwise it works alike to TweakScale, supporting custom PartUpdaters that tweak part module parameters on resize. It is, of coures, not nearly as complex and feature-rich as TweakScale.
+
+**This is a submodule. Do not checkout outside of AT_Utils or the project wil fail to build**
